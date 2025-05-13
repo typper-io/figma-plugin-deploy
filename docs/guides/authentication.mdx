@@ -75,6 +75,44 @@ ABCDEFGHIJKLMNOPQRSTUVWXYZ234567
   Figma.
 </Note>
 
+## Security Best Practices
+
+### Dedicated Publishing Account
+
+We strongly recommend creating a dedicated Figma account for plugin publishing. This approach:
+
+1. **Enhanced Security**
+
+   - Limits access to only plugin-related functionalities
+   - Reduces risk of compromising main company/team accounts
+   - Provides better control over publishing credentials
+   - Simplifies team member transitions
+
+2. **Account Setup**
+
+   - Create a new Figma account with a company email
+   - Use a strong, unique password
+   - Enable two-factor authentication (required for plugin publishing)
+   - Store credentials in a secure password manager
+
+3. **Best Practices**
+   - Use this account exclusively for plugin publishing
+   - Grant minimal necessary permissions
+   - Regularly rotate credentials
+   - Document access procedures securely
+
+<Warning>
+  Store the dedicated account's credentials using your organization's secret
+  management system and never share them through unsecured channels.
+</Warning>
+
+### General Security Guidelines
+
+1. Never share your credentials
+2. Don't store credentials in repository files
+3. Regularly review repository access
+4. Monitor account activity regularly
+
 ## Testing Authentication
 
 To verify your credentials are configured correctly:
@@ -94,6 +132,7 @@ To verify your credentials are configured correctly:
   </Accordion>
 
 {" "}
+
 <Accordion title="Invalid TOTP Error">
   - Check if TOTP code is in the correct format - Confirm the code was copied
   completely - Try disabling and re-enabling 2FA to get a new code
@@ -104,13 +143,6 @@ To verify your credentials are configured correctly:
     plugin is in the correct team
   </Accordion>
 </AccordionGroup>
-
-## Security Best Practices
-
-1. Never share your credentials
-2. Don't store credentials in repository files
-3. Regularly review repository access
-4. Consider using a dedicated service account for deployments
 
 <Card title="Next Step" icon="arrow-right">
   Learn how to [configure your workflow](/guides/workflow-setup) to automate

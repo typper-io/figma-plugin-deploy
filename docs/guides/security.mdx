@@ -34,6 +34,42 @@ Always store sensitive information in GitHub Secrets:
    - Use environment protection rules
    - Enable required reviewers for protected environments
 
+### Dedicated Publishing Account
+
+Following the principle of least privilege, we strongly recommend creating a dedicated Figma account for plugin publishing:
+
+1. **Account Setup**
+
+   - Create a new Figma account using a company email
+   - Use a strong, unique password
+   - Enable two-factor authentication (mandatory for plugin publishing)
+   - Document account details in a secure location
+
+2. **Permission Configuration**
+
+   - Grant access only to plugin management features
+   - Remove unnecessary team/organization access
+   - Configure plugin-specific permissions only
+
+3. **Access Management**
+
+   - Maintain a list of team members with access to this account
+   - Implement a process for access revocation
+   - Regularly review and update access permissions
+   - Consider using a password manager for team access
+
+4. **Security Considerations**
+   - Use this account exclusively for plugin publishing
+   - Avoid using this account for design work or other Figma activities
+   - Monitor account activity regularly
+   - Update credentials if team members with access leave the organization
+
+<Warning>
+  Never share this account's credentials through unsecured channels like email
+  or chat. Use a secure password manager or your organization's secret
+  management system.
+</Warning>
+
 ## Environment Configuration
 
 ### Environment Protection
@@ -142,6 +178,7 @@ Maintain deployment records:
   </Accordion>
 
 {" "}
+
 <Accordion title="Unauthorized Access">
   - Review repository access regularly - Monitor workflow runs - Check
   deployment logs
