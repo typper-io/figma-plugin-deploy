@@ -1,0 +1,118 @@
+---
+title: "Authentication"
+description: "How to set up secure authentication with Figma"
+---
+
+# Authentication with Figma
+
+Typper Figma Plugin Deploy requires secure authentication with your Figma account. This guide explains how to properly set up your credentials.
+
+## Authentication Requirements
+
+To publish plugins to Figma, you need:
+
+1. A Figma account with 2FA enabled
+2. Administrator permissions for the plugin
+3. Access to the team where the plugin is hosted
+
+## Setting up 2FA
+
+### 1. Enable 2FA in Figma
+
+If you haven't enabled 2FA yet:
+
+1. Access your Figma settings
+2. Go to the security section
+3. Enable two-factor authentication
+4. **Important**: During activation, save the TOTP secret code
+
+<Warning>
+  If you already have 2FA enabled but didn't save the TOTP secret code, you'll
+  need to disable and re-enable 2FA to get a new code.
+</Warning>
+
+### 2. Obtain Required Credentials
+
+You'll need three pieces of information:
+
+1. Figma account email
+2. Figma account password
+3. TOTP secret code (obtained during 2FA activation)
+
+## Configuring Secrets
+
+### In GitHub
+
+1. Go to your GitHub repository
+2. Navigate to Settings > Secrets and Variables > Actions
+3. Add the following secrets:
+
+<CodeGroup>
+```bash New Secret
+FIGMA_EMAIL
+```
+
+```bash New Secret
+FIGMA_PASSWORD
+```
+
+```bash New Secret
+FIGMA_TOTP_SECRET
+```
+
+</CodeGroup>
+
+### TOTP Secret Format
+
+The TOTP code must be in base32 format. Example:
+
+```
+ABCDEFGHIJKLMNOPQRSTUVWXYZ234567
+```
+
+<Note>
+  The TOTP code is case-sensitive. Make sure to copy it exactly as provided by
+  Figma.
+</Note>
+
+## Testing Authentication
+
+To verify your credentials are configured correctly:
+
+1. Make a test push to your configured workflow branch
+2. Check the logs in the Actions tab
+3. Look for any authentication-related error messages
+
+## Troubleshooting
+
+### Common Errors
+
+<AccordionGroup>
+  <Accordion title="Invalid Authentication Error">
+    - Verify email and password are correct - Confirm secrets were saved without
+    extra spaces
+  </Accordion>
+
+{" "}
+<Accordion title="Invalid TOTP Error">
+  - Check if TOTP code is in the correct format - Confirm the code was copied
+  completely - Try disabling and re-enabling 2FA to get a new code
+</Accordion>
+
+  <Accordion title="Permission Error">
+    - Verify you have administrator permissions for the plugin - Confirm the
+    plugin is in the correct team
+  </Accordion>
+</AccordionGroup>
+
+## Security Best Practices
+
+1. Never share your credentials
+2. Don't store credentials in repository files
+3. Regularly review repository access
+4. Consider using a dedicated service account for deployments
+
+<Card title="Next Step" icon="arrow-right">
+  Learn how to [configure your workflow](/guides/workflow-setup) to automate
+  deployments
+</Card>

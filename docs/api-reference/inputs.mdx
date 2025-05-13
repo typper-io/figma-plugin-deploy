@@ -1,0 +1,149 @@
+---
+title: "Action Inputs"
+description: "Reference for all available inputs in the Typper Figma Plugin Deploy action"
+---
+
+# Action Inputs
+
+This page documents all available inputs for the Typper Figma Plugin Deploy action.
+
+## Required Inputs
+
+### `plugin-id`
+
+<ParamField query="plugin-id" type="string" required>
+  The unique identifier of your Figma plugin. You can find this in your plugin's
+  settings or URL.
+</ParamField>
+
+Example:
+
+```yaml
+with:
+  plugin-id: "1234567890"
+```
+
+### `team-id`
+
+<ParamField query="team-id" type="string" required>
+  The ID of the Figma team where your plugin is hosted. Found in your team's
+  URL.
+</ParamField>
+
+Example:
+
+```yaml
+with:
+  team-id: "9876543210"
+```
+
+## Optional Inputs
+
+### `release-notes`
+
+<ParamField query="release-notes" type="string">
+  Release notes for this version of your plugin. Supports markdown formatting.
+</ParamField>
+
+Example:
+
+```yaml
+with:
+  release-notes: |
+    ## New Features
+    - Added dark mode support
+    - Improved performance
+
+    ## Bug Fixes
+    - Fixed layout issues
+```
+
+## Environment Variables
+
+These are required environment variables that should be set as GitHub Secrets:
+
+### `FIGMA_EMAIL`
+
+<ParamField query="FIGMA_EMAIL" type="string" required>
+  The email address associated with your Figma account.
+</ParamField>
+
+### `FIGMA_PASSWORD`
+
+<ParamField query="FIGMA_PASSWORD" type="string" required>
+  Your Figma account password.
+</ParamField>
+
+### `FIGMA_TOTP_SECRET`
+
+<ParamField query="FIGMA_TOTP_SECRET" type="string" required>
+  The TOTP secret for two-factor authentication.
+</ParamField>
+
+## Usage Example
+
+Here's a complete example using all available inputs:
+
+```yaml
+name: Deploy Figma Plugin
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy Figma Plugin
+        uses: typper-io/figma-plugin-deploy@v1
+        with:
+          plugin-id: "1234567890"
+          team-id: "9876543210"
+          release-notes: |
+            ## What's New
+            - Feature 1
+            - Feature 2
+
+            ## Bug Fixes
+            - Fix 1
+            - Fix 2
+        env:
+          FIGMA_EMAIL: ${{ secrets.FIGMA_EMAIL }}
+          FIGMA_PASSWORD: ${{ secrets.FIGMA_PASSWORD }}
+          FIGMA_TOTP_SECRET: ${{ secrets.FIGMA_TOTP_SECRET }}
+```
+
+## Best Practices
+
+1. **Plugin ID**
+
+   - Keep it in environment variables for different environments
+   - Validate the ID before deployment
+
+2. **Team ID**
+
+   - Store in environment variables
+   - Verify team access permissions
+
+3. **Release Notes**
+   - Use clear and concise descriptions
+   - Follow a consistent format
+   - Include relevant version numbers
+
+## Related
+
+<CardGroup cols={2}>
+  <Card
+    title="Environment Variables"
+    icon="gear"
+    href="/api-reference/environment-variables"
+  >
+    Learn about environment variable configuration
+  </Card>
+  <Card title="Workflow Setup" icon="code" href="/guides/workflow-setup">
+    See workflow configuration examples
+  </Card>
+</CardGroup>{" "}

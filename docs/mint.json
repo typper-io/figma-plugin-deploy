@@ -1,0 +1,63 @@
+{
+  "$schema": "https://mintlify.com/schema.json",
+  "name": "Typper Figma Plugin Deploy",
+  "logo": {
+    "dark": "/logo/dark.svg",
+    "light": "/logo/light.svg"
+  },
+  "favicon": "/favicon.svg",
+  "colors": {
+    "primary": "#0047FD",
+    "light": "#3B82F6",
+    "dark": "#2563EB",
+    "background": {
+      "light": "#FFFFFF",
+      "dark": "#01050D"
+    }
+  },
+  "topbarLinks": [
+    {
+      "name": "Support",
+      "url": "mailto:help@typper.io"
+    }
+  ],
+  "topbarCtaButton": {
+    "name": "Typper Plugins",
+    "url": "https://plugins.typper.io"
+  },
+  "navigation": [
+    {
+      "group": "Getting Started",
+      "pages": ["introduction", "quickstart"]
+    },
+    {
+      "group": "Guides",
+      "pages": [
+        "guides/authentication",
+        "guides/workflow-setup",
+        "guides/security"
+      ]
+    },
+    {
+      "group": "API Reference",
+      "pages": ["api-reference/inputs", "api-reference/environment-variables"]
+    }
+  ],
+
+  "footerSocials": {
+    "twitter": "https://twitter.com/typper_io",
+    "github": "https://github.com/typper-io",
+    "linkedin": "https://www.linkedin.com/company/typper-io"
+  },
+  "feedback": {
+    "thumbsRating": true
+  },
+  "metadata": {
+    "og:site_name": "Typper Figma Plugin Deploy",
+    "og:title": "Typper Figma Plugin Deploy",
+    "og:description": "Typper Figma Plugin Deploy is a GitHub Action that allows you to deploy your Figma plugin to the Figma Plugin Store.",
+    "twitter:title": "Typper Figma Plugin Deploy",
+    "twitter:description": "Typper Figma Plugin Deploy is a GitHub Action that allows you to deploy your Figma plugin to the Figma Plugin Store.",
+    "twitter:url": "https://typper-ea116d65.mintlify.app/introduction"
+  }
+}

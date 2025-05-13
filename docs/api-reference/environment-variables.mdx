@@ -1,0 +1,168 @@
+---
+title: "Environment Variables"
+description: "Reference for environment variables used in the Typper Figma Plugin Deploy action"
+---
+
+# Environment Variables
+
+This page documents all environment variables used in the Typper Figma Plugin Deploy action.
+
+## Required Variables
+
+### `FIGMA_EMAIL`
+
+<ParamField query="FIGMA_EMAIL" type="string" required>
+  The email address used to log in to your Figma account.
+</ParamField>
+
+**Security Note**: Store this value as a GitHub Secret.
+
+### `FIGMA_PASSWORD`
+
+<ParamField query="FIGMA_PASSWORD" type="string" required>
+  Your Figma account password.
+</ParamField>
+
+**Security Note**: Store this value as a GitHub Secret and never expose it in logs or repository files.
+
+### `FIGMA_TOTP_SECRET`
+
+<ParamField query="FIGMA_TOTP_SECRET" type="string" required>
+  The TOTP secret key used for two-factor authentication.
+</ParamField>
+
+**Security Note**: Store this value as a GitHub Secret. This is the base32 encoded secret provided when setting up 2FA.
+
+## Setting Up Environment Variables
+
+### In GitHub Secrets
+
+1. Navigate to your repository settings
+2. Go to Secrets and Variables > Actions
+3. Click "New repository secret"
+4. Add each required variable:
+
+<CodeGroup>
+```bash Add Email
+Name: FIGMA_EMAIL
+Value: your.email@example.com
+```
+
+```bash Add Password
+Name: FIGMA_PASSWORD
+Value: your-secure-password
+```
+
+```bash Add TOTP
+Name: FIGMA_TOTP_SECRET
+Value: YOUR-BASE32-TOTP-SECRET
+```
+
+</CodeGroup>
+
+### In Workflow File
+
+Reference the secrets in your workflow file:
+
+```yaml
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy Figma Plugin
+        uses: typper-io/figma-plugin-deploy@v1
+        env:
+          FIGMA_EMAIL: ${{ secrets.FIGMA_EMAIL }}
+          FIGMA_PASSWORD: ${{ secrets.FIGMA_PASSWORD }}
+          FIGMA_TOTP_SECRET: ${{ secrets.FIGMA_TOTP_SECRET }}
+```
+
+## Environment Protection
+
+### Using Protected Environments
+
+Configure environment protection rules:
+
+```yaml
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Deploy Figma Plugin
+        uses: typper-io/figma-plugin-deploy@v1
+        env:
+          FIGMA_EMAIL: ${{ secrets.FIGMA_EMAIL }}
+          FIGMA_PASSWORD: ${{ secrets.FIGMA_PASSWORD }}
+          FIGMA_TOTP_SECRET: ${{ secrets.FIGMA_TOTP_SECRET }}
+```
+
+### Environment-Specific Variables
+
+Use different variables for different environments:
+
+```yaml
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}
+    steps:
+      - name: Deploy Figma Plugin
+        uses: typper-io/figma-plugin-deploy@v1
+        env:
+          FIGMA_EMAIL: ${{ secrets.FIGMA_EMAIL }}
+          FIGMA_PASSWORD: ${{ secrets.FIGMA_PASSWORD }}
+          FIGMA_TOTP_SECRET: ${{ secrets.FIGMA_TOTP_SECRET }}
+```
+
+## Security Best Practices
+
+1. **Secret Management**
+
+   - Never log secret values
+   - Rotate secrets regularly
+   - Use environment protection rules
+
+2. **Access Control**
+
+   - Limit access to secrets
+   - Audit secret usage
+   - Use separate accounts for different environments
+
+3. **Monitoring**
+   - Monitor secret usage
+   - Review workflow logs
+   - Set up alerts for unauthorized access
+
+## Troubleshooting
+
+### Common Issues
+
+<AccordionGroup>
+  <Accordion title="Authentication Failures">
+    - Verify email and password are correct - Check TOTP secret format - Ensure
+    secrets are properly configured
+  </Accordion>
+
+{" "}
+<Accordion title="Secret Access Issues">
+  - Check repository permissions - Verify environment access - Review secret
+  scope
+</Accordion>
+
+  <Accordion title="Environment Problems">
+    - Validate environment configuration - Check protection rules - Verify
+    deployment conditions
+  </Accordion>
+</AccordionGroup>
+
+## Related Resources
+
+<CardGroup cols={2}>
+  <Card title="Security Guide" icon="shield" href="/guides/security">
+    Learn about security best practices
+  </Card>
+  <Card title="Action Inputs" icon="code" href="/api-reference/inputs">
+    See available action inputs
+  </Card>
+</CardGroup>{" "}

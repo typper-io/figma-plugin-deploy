@@ -1,0 +1,94 @@
+---
+title: "Quick Start"
+description: "Get started with Typper Figma Plugin Deploy in minutes"
+---
+
+# Quick Start
+
+This guide will help you quickly set up Typper Figma Plugin Deploy to automate your Figma plugin deployment.
+
+## Initial Setup
+
+### 1. Prepare Your Repository
+
+Make sure your Figma plugin project is in a GitHub repository and has a valid `manifest.json` file.
+
+### 2. Configure Secrets
+
+In your GitHub repository, go to Settings > Secrets and Variables > Actions and add the following secrets:
+
+```bash
+FIGMA_EMAIL=your-email@example.com
+FIGMA_PASSWORD=your-figma-password
+FIGMA_TOTP_SECRET=your-totp-secret
+```
+
+<Note>
+  The TOTP secret is required for two-factor authentication. See the
+  [Authentication](/guides/authentication) guide for more details.
+</Note>
+
+### 3. Create the Workflow
+
+Create a `.github/workflows/deploy.yml` file in your repository with the following content:
+
+```yaml
+name: Deploy Figma Plugin
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy Figma Plugin
+        uses: typper-io/figma-plugin-deploy@v1
+        with:
+          plugin-id: "your-plugin-id"
+          team-id: "your-team-id"
+          release-notes: "New version"
+        env:
+          FIGMA_EMAIL: ${{ secrets.FIGMA_EMAIL }}
+          FIGMA_PASSWORD: ${{ secrets.FIGMA_PASSWORD }}
+          FIGMA_TOTP_SECRET: ${{ secrets.FIGMA_TOTP_SECRET }}
+```
+
+<Note>
+  Replace `your-plugin-id` and `your-team-id` with your actual Figma plugin and
+  team IDs.
+</Note>
+
+## Testing the Deployment
+
+1. Make a commit and push to the main branch
+2. Go to the Actions tab in your GitHub repository
+3. You'll see the "Deploy Figma Plugin" workflow running
+4. After completion, verify your plugin in Figma
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card
+    title="Workflow Configuration"
+    icon="gear"
+    href="/guides/workflow-setup"
+  >
+    Learn advanced workflow configurations
+  </Card>
+  <Card title="Security" icon="shield" href="/guides/security">
+    Security best practices
+  </Card>
+</CardGroup>
+
+## Troubleshooting
+
+If you encounter any issues during setup:
+
+1. Verify all secrets are configured correctly
+2. Confirm your plugin and team IDs are correct
+3. Check the logs in the Actions tab for details
+4. Consult our [authentication documentation](/guides/authentication) for credential-related issues

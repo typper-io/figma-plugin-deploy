@@ -1,0 +1,23 @@
+name: "Typper Figma Plugin Deploy"
+description: "Deploy your Figma plugin using CD"
+author: "@typper-io"
+
+inputs:
+  plugin-id:
+    description: "Your Figma plugin ID"
+    required: true
+  team-id:
+    description: "Your Figma team ID"
+    required: true
+  release-notes:
+    description: "Release notes for this version"
+    required: false
+    default: ""
+
+runs:
+  using: "node22"
+  main: "dist/index.js"
+
+branding:
+  icon: "upload-cloud"
+  color: "purple"

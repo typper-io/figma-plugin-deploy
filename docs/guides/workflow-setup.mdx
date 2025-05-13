@@ -1,0 +1,197 @@
+---
+title: "Workflow Setup"
+description: "Configure GitHub Actions workflow for Figma plugin deployment"
+---
+
+# Workflow Setup
+
+Learn how to configure and customize your GitHub Actions workflow for Figma plugin deployment.
+
+## Basic Workflow
+
+The basic workflow configuration looks like this:
+
+```yaml
+name: Deploy Figma Plugin
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy Figma Plugin
+        uses: typper-io/figma-plugin-deploy@v1
+        with:
+          plugin-id: "your-plugin-id"
+          team-id: "your-team-id"
+          release-notes: "New version"
+        env:
+          FIGMA_EMAIL: ${{ secrets.FIGMA_EMAIL }}
+          FIGMA_PASSWORD: ${{ secrets.FIGMA_PASSWORD }}
+          FIGMA_TOTP_SECRET: ${{ secrets.FIGMA_TOTP_SECRET }}
+```
+
+## Advanced Configuration
+
+### Custom Trigger Events
+
+You can customize when the workflow runs:
+
+```yaml
+on:
+  # On specific tags
+  push:
+    tags:
+      - 'v*'
+
+  # On specific branches
+  push:
+    branches:
+      - main
+      - release/*
+
+  # Manually through GitHub UI
+  workflow_dispatch:
+```
+
+### Release Notes from Commit Messages
+
+Use git commit messages for release notes:
+
+```yaml
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get Release Notes
+        id: release-notes
+        run: |
+          NOTES=$(git log --format=%s $(git describe --tags --abbrev=0)..HEAD)
+          echo "notes<<EOF" >> $GITHUB_OUTPUT
+          echo "$NOTES" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Deploy Figma Plugin
+        uses: typper-io/figma-plugin-deploy@v1
+        with:
+          plugin-id: "your-plugin-id"
+          team-id: "your-team-id"
+          release-notes: ${{ steps.release-notes.outputs.notes }}
+        env:
+          FIGMA_EMAIL: ${{ secrets.FIGMA_EMAIL }}
+          FIGMA_PASSWORD: ${{ secrets.FIGMA_PASSWORD }}
+          FIGMA_TOTP_SECRET: ${{ secrets.FIGMA_TOTP_SECRET }}
+```
+
+### Build Steps
+
+If your plugin requires building:
+
+```yaml
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build Plugin
+        run: npm run build
+
+      - name: Deploy Figma Plugin
+        uses: typper-io/figma-plugin-deploy@v1
+        with:
+          plugin-id: "your-plugin-id"
+          team-id: "your-team-id"
+          release-notes: "New version"
+        env:
+          FIGMA_EMAIL: ${{ secrets.FIGMA_EMAIL }}
+          FIGMA_PASSWORD: ${{ secrets.FIGMA_PASSWORD }}
+          FIGMA_TOTP_SECRET: ${{ secrets.FIGMA_TOTP_SECRET }}
+```
+
+## Environment Variables
+
+You can use different environments for staging and production:
+
+```yaml
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy Figma Plugin
+        uses: typper-io/figma-plugin-deploy@v1
+        with:
+          plugin-id: ${{ vars.FIGMA_PLUGIN_ID }}
+          team-id: ${{ vars.FIGMA_TEAM_ID }}
+          release-notes: "New version"
+        env:
+          FIGMA_EMAIL: ${{ secrets.FIGMA_EMAIL }}
+          FIGMA_PASSWORD: ${{ secrets.FIGMA_PASSWORD }}
+          FIGMA_TOTP_SECRET: ${{ secrets.FIGMA_TOTP_SECRET }}
+```
+
+## Best Practices
+
+1. **Version Control**
+
+   - Use semantic versioning for your releases
+   - Tag your releases with version numbers
+   - Include meaningful commit messages
+
+2. **Security**
+
+   - Use environment secrets for sensitive data
+   - Limit workflow permissions to necessary actions
+   - Review workflow logs for sensitive information
+
+3. **Maintenance**
+   - Keep action versions up to date
+   - Document workflow configurations
+   - Test workflow changes in a staging environment
+
+## Troubleshooting
+
+### Common Issues
+
+<AccordionGroup>
+  <Accordion title="Workflow Not Triggering">
+    - Check branch name matches workflow configuration - Verify workflow file is
+    in correct location - Ensure repository has workflow permissions enabled
+  </Accordion>
+
+{" "}
+<Accordion title="Build Failures">
+  - Check build script configuration - Verify all dependencies are installed -
+  Review build logs for errors
+</Accordion>
+
+  <Accordion title="Deployment Failures">
+    - Verify plugin and team IDs are correct - Check authentication credentials
+    - Review deployment logs for specific errors
+  </Accordion>
+</AccordionGroup>
+
+<Card title="Next Step" icon="arrow-right">
+  Learn about [security best practices](/guides/security) for your deployment
+  workflow
+</Card>{" "}

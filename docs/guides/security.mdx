@@ -1,0 +1,182 @@
+---
+title: "Security"
+description: "Security best practices for Figma plugin deployment"
+---
+
+# Security Best Practices
+
+Security is crucial when automating your Figma plugin deployment. This guide covers best practices to keep your deployment process secure.
+
+## Credential Management
+
+### GitHub Secrets
+
+Always store sensitive information in GitHub Secrets:
+
+- `FIGMA_EMAIL`
+- `FIGMA_PASSWORD`
+- `FIGMA_TOTP_SECRET`
+
+<Warning>
+  Never store these credentials in your repository files or expose them in logs.
+</Warning>
+
+### Access Control
+
+1. **Repository Access**
+
+   - Limit repository access to necessary team members
+   - Use repository roles to control permissions
+   - Regularly audit repository access
+
+2. **Workflow Permissions**
+   - Configure minimal required permissions for workflows
+   - Use environment protection rules
+   - Enable required reviewers for protected environments
+
+## Environment Configuration
+
+### Environment Protection
+
+Set up protected environments in GitHub:
+
+1. Go to Repository Settings > Environments
+2. Create environments (e.g., staging, production)
+3. Configure protection rules:
+   - Required reviewers
+   - Wait timer
+   - Deployment branches
+
+Example environment configuration:
+
+```yaml
+name: Deploy to Production
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+      # ... deployment steps
+```
+
+### Secret Rotation
+
+Implement regular credential rotation:
+
+1. Generate new credentials periodically
+2. Update GitHub Secrets
+3. Verify deployment after updates
+4. Remove old credentials
+
+## Secure Workflow Practices
+
+### Input Validation
+
+Validate all inputs in your workflow:
+
+```yaml
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate Inputs
+        run: |
+          if [[ ! ${{ github.ref }} =~ ^refs/tags/v ]]; then
+            echo "Invalid tag format"
+            exit 1
+          fi
+```
+
+### Dependency Security
+
+1. **Action Versions**
+   - Pin action versions using SHA
+   - Regularly update dependencies
+   - Monitor security advisories
+
+Example of pinned actions:
+
+```yaml
+steps:
+  - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4
+  - uses: actions/setup-node@b39b52d1213e96004bfcb1c61a8a6fa8ab84f3e8 # v4
+```
+
+2. **Dependency Scanning**
+   - Use GitHub's dependency scanning
+   - Implement automated security updates
+   - Review dependency changes
+
+## Monitoring and Auditing
+
+### Workflow Logs
+
+Monitor workflow execution:
+
+1. Review workflow logs regularly
+2. Set up notifications for failures
+3. Monitor unusual patterns
+4. Configure log retention policies
+
+### Audit Trail
+
+Maintain deployment records:
+
+1. Use detailed commit messages
+2. Tag releases properly
+3. Document deployment issues
+4. Keep change logs updated
+
+## Common Security Issues
+
+<AccordionGroup>
+  <Accordion title="Credential Exposure">
+    - Check workflow logs for exposed secrets - Review public repository content
+    - Monitor GitHub Security alerts
+  </Accordion>
+
+{" "}
+<Accordion title="Unauthorized Access">
+  - Review repository access regularly - Monitor workflow runs - Check
+  deployment logs
+</Accordion>
+
+  <Accordion title="Dependency Vulnerabilities">
+    - Monitor dependency advisories - Update dependencies regularly - Review
+    automated security updates
+  </Accordion>
+</AccordionGroup>
+
+## Security Checklist
+
+<Check>Store credentials in GitHub Secrets</Check>
+<Check>Configure protected environments</Check>
+<Check>Implement secret rotation</Check>
+<Check>Pin action versions</Check>
+<Check>Monitor workflow logs</Check>
+<Check>Regular security audits</Check>
+
+## Additional Resources
+
+<CardGroup cols={2}>
+  <Card
+    title="GitHub Security"
+    icon="shield"
+    href="https://docs.github.com/en/actions/security-guides"
+  >
+    GitHub Actions security guides
+  </Card>
+  <Card
+    title="Figma Security"
+    icon="figma"
+    href="https://www.figma.com/security"
+  >
+    Figma security documentation
+  </Card>
+</CardGroup>{" "}
