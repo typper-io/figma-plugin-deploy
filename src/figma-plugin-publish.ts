@@ -186,6 +186,18 @@ export class FigmaPublishFlow {
 
   private getBasicHeaders() {
     return {
+      priority: "u=1, i",
+      origin: "https://www.figma.com",
+      referer: "https://www.figma.com",
+      "sec-ch-ua": '"Not A(Brand";v="8", "Chromium";v="132"',
+      "sec-ch-ua-mobile": "?0",
+      "sec-ch-ua-platform": '"macOS"',
+      "sec-fetch-dest": "empty",
+      "sec-fetch-mode": "cors",
+      "sec-fetch-site": "same-origin",
+      "x-figma-user-plan-max": "pro",
+      "user-agent":
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Figma/125.4.8 Chrome/132.0.6834.210 Electron/34.5.1 Safari/537.36 FigmaARM",
       accept: "application/json",
       "content-type": "application/json",
       "x-csrf-bypass": "yes",
