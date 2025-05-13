@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc && ncc build lib/index.js -o dist"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "typescript": "^5.8.3",
-    "ts-node": "^10.9.2"
+    "ts-node": "^10.9.2",
+    "@vercel/ncc": "^0.38.1"
   }
 }
